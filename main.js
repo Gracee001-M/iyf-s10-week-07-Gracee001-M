@@ -106,3 +106,17 @@ const order = [
 ];
 
 console.log(calculateOrderTotal(order)); // 69
+
+let todos=[]
+function addTodo(text){todos.push({id:Date.now(),text,completed:false})}
+if(todos.length==0) console.log("Empty")
+
+  const todos = [];
+
+function addTodo(text) {
+    todos.push({ id: Date.now(), text, completed: false });
+}
+
+if (todos.length === 0) {
+    console.log('Empty');
+}
