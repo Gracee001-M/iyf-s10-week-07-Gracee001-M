@@ -80,3 +80,29 @@ function setFilter(filter) {
     state.filter = filter;
   }
 }
+
+function calculateOrderTotal(items) {
+    let total = 0;
+
+    // Correct loop condition
+    for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        // Correct property name
+        total += item.price * item.quantity;
+    }
+
+    // Apply discount if total > 100
+    if (total > 100) {
+        total = total * 0.9;
+    }
+
+    return total;
+}
+
+const order = [
+    { name: "Book", price: 15, quantity: 2 },      // 30
+    { name: "Pen", price: 3, quantity: 5 },        // 15
+    { name: "Notebook", price: 8, quantity: 3 }    // 24
+];
+
+console.log(calculateOrderTotal(order)); // 69
