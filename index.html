@@ -7,18 +7,18 @@
     body { font-family: Arial, sans-serif; margin: 20px; }
     #notes { margin-top: 20px; }
     .note { padding: 10px; border: 1px solid #ccc; margin-bottom: 10px; }
-    button { margin-left: 10px; }
   </style>
 </head>
 <body>
   <h1>My Notes</h1>
-  <input type="text" id="noteInput" placeholder="Write a note..." />
-  <button onclick="addNote()">Add Note</button>
+  <textarea id="noteInput" placeholder="Write a note..." rows="4" cols="40"></textarea><br>
+  <button id="addNote">Add Note</button>
+  <button id="clearNotes">Clear All</button>
 
   <div id="notes"></div>
 
   <script>
-    // Helpers
+    // Helper functions
     function saveToStorage(key, data) {
       localStorage.setItem(key, JSON.stringify(data));
     }
@@ -33,44 +33,46 @@
     }
 
     // Notes logic
+    const notesContainer = document.getElementById("notes");
+    const noteInput = document.getElementById("noteInput");
+    const addNoteBtn = document.getElementById("addNote");
+    const clearNotesBtn = document.getElementById("clearNotes");
+
     function renderNotes() {
+      notesContainer.innerHTML = "";
       const notes = getFromStorage("notes");
-      const notesDiv = document.getElementById("notes");
-      notesDiv.innerHTML = "";
-
       notes.forEach((note, index) => {
-        const noteEl = document.createElement("div");
-        noteEl.className = "note";
-        noteEl.textContent = note;
-
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "Delete";
-        deleteBtn.onclick = () => deleteNote(index);
-
-        noteEl.appendChild(deleteBtn);
-        notesDiv.appendChild(noteEl);
+        const div = document.createElement("div");
+        div.className = "note";
+        div.textContent = note;
+        // Add delete button for each note
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "Delete";
+        delBtn.onclick = () => {
+          notes.splice(index, 1);
+          saveToStorage("notes", notes);
+          renderNotes();
+        };
+        div.appendChild(delBtn);
+        notesContainer.appendChild(div);
       });
     }
 
-    function addNote() {
-      const input = document.getElementById("noteInput");
-      const note = input.value.trim();
-      if (!note) return;
+    addNoteBtn.onclick = () => {
+      const note = noteInput.value.trim();
+      if (note) {
+        const notes = getFromStorage("notes");
+        notes.push(note);
+        saveToStorage("notes", notes);
+        noteInput.value = "";
+        renderNotes();
+      }
+    };
 
-      const notes = getFromStorage("notes");
-      notes.push(note);
-      saveToStorage("notes", notes);
-
-      input.value = "";
+    clearNotesBtn.onclick = () => {
+      removeFromStorage("notes");
       renderNotes();
-    }
-
-    function deleteNote(index) {
-      const notes = getFromStorage("notes");
-      notes.splice(index, 1);
-      saveToStorage("notes", notes);
-      renderNotes();
-    }
+    };
 
     // Initial render
     renderNotes();
