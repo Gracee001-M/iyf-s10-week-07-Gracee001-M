@@ -50,3 +50,33 @@ function toggleTodo(id) {
   );
   store.setState({ todos });
 }
+
+const MIN_PASSWORD_LENGTH = 8;
+if (password.length < MIN_PASSWORD_LENGTH) { }
+
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
+setTimeout(callback, ONE_DAY_MS);
+
+// BAD
+function toggle(id) {
+  const t = todos.find(x => x.i === id);
+  t.c = !t.c;
+}
+
+// GOOD
+function toggleTodo(todoId) {
+  const todo = todos.find(item => item.id === todoId);
+  if (todo) {
+    todo.completed = !todo.completed;
+  }
+}
+
+const FILTER_ALL = "all";
+const FILTER_ACTIVE = "active";
+const FILTER_COMPLETED = "completed";
+
+function setFilter(filter) {
+  if ([FILTER_ALL, FILTER_ACTIVE, FILTER_COMPLETED].includes(filter)) {
+    state.filter = filter;
+  }
+}
